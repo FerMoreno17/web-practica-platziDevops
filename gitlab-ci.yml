@@ -1,0 +1,39 @@
+image: reactnativecommunity/react-native-android
+
+stages:
+  - lint
+  - install
+  - test
+  - run
+
+ESLint:
+  stage: lint
+  only:
+    - merge_requests
+  script:
+    - npx eslint .
+
+install_dependencies:
+  stage: install
+  only:
+    - merge_requests
+  script:
+    - npm i 
+  artifacts:
+    expire_in: 1hr
+    paths:
+      - node_modules/
+  cache:
+    paths:
+      - node_modules/
+
+run_android:
+  stage: run
+  script: 
+    - react-native run-android
+    - echo "react native active"
+
+test:
+  stage: test
+  script:
+    - npm run test
